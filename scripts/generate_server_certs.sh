@@ -5,7 +5,7 @@ ARGS=()
 SERVER_DIR="~/"
 CA_KEY="~/ca.key"
 CA_CERT="~/ca.crt"
-SUBJECT="/CN=metavac.ac/OU=Infra/O=Metavac"
+SUBJECT="/CN=metavac.ac/OU=Infra/O=Server"
 EXPIRY=365
 
 while [[ $# -gt 0 ]]; do

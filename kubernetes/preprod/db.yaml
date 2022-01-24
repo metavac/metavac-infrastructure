@@ -1,0 +1,77 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metavac-db-service
+  namespace: metavac-preprod
+  labels:
+    app: metavac-db
+spec:
+  type: NodePort
+  ports:
+  - name: mongodb-main
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
+    nodePort: 30007
+  selector:
+    app: metavac-db
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: metavac-db
+  namespace: metavac-preprod
+  labels:
+    app: metavac-db
+spec:
+  replicas: 1
+  serviceName: metavac-db-service
+  selector:
+    matchLabels:
+      app: metavac-db
+  template:
+    metadata:
+      namespace: metavac-preprod
+      labels:
+        app: metavac-db
+    spec:
+      containers:
+      - name: metavac-db-container
+        image: "mongo:latest"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+          name: mongodb-main
+        volumeMounts:
+        - name: metavac-db-storage
+          mountPath: /data
+          subPath: db
+        - name: metavac-db-storage
+          mountPath: /etc/ssl
+          subPath: certs
+        - name: metavac-db-storage
+          mountPath: /etc/mongod.conf
+          subPath: mongod.conf
+        - name: metavac-db-storage
+          mountPath: /var/log
+          subPath: logs
+        args:
+          - -d
+  volumeClaimTemplates:
+    - metadata:
+        name: metavac-db-storage
+        namespace: metavac-preprod
+      spec:
+        storageClassName: local-storage
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 8Gi

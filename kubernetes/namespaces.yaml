@@ -8,6 +8,13 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: metavac-preprod
+  labels:
+    name: metavac-preprod
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: metavac-prod
   labels:
     name: metavac-prod
