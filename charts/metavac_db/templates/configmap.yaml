@@ -1,0 +1,18 @@
+{{- define "metavac-db.mongo.configmap.tpl" }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "metavac-db.fullname" . }}-schema
+  namespace: {{ include "metavac-db.namespace" . }}
+data:
+{{- $currentScope := . }}
+{{- range $path, $_ := $.Files.Glob "schema/*.tpl" }}
+    {{- with $currentScope }}
+        {{- "\n" | indent 2 }}{{- ($path | base | split ".tpl")._0 }}: {{ tpl (.Files.Get $path) . | nospace | quote }}
+    {{- end }}
+{{- end }}
+
+{{- end }}
+
+{{ include "metavac-db.mongo.configmap.tpl" . }}
