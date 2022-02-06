@@ -65,7 +65,7 @@ Create the name of the service account to use
 Create the namespace to deploy to
 */}}
 {{- define "metavac-db.namespace" -}}
-{{- .Values.global.namespace | default "default" }}
+{{- default "default" .Values.global.namespace .Release.namespace }}
 {{- end }}
 
 {{/*
@@ -80,4 +80,18 @@ Mongo Database name to deploy to
 */}}
 {{- define "metavac-db.mongo.name" -}}
 {{- .Values.db.name }}
+{{- end }}
+
+{{/*
+Mongo Database ca_cert_file_path
+*/}}
+{{- define "metavac-db.mongo.ca_cert_file_path" -}}
+{{- tpl .Values.global.cert_mongo_dir . }}/ca.crt
+{{- end }}
+
+{{/*
+Mongo Database key_file_path
+*/}}
+{{- define "metavac-db.mongo.key_file_path" -}}
+{{ tpl .Values.global.cert_mongo_dir . }}/id.pem
 {{- end }}

@@ -13,5 +13,9 @@ sharding:
 replication:
     replSetName: metavac
 net:
-    bindIp: 0.0.0.0,/tmp/mongod.sock
+  bindIp: 0.0.0.0,/tmp/mongod.sock
+  tls:
+    mode: requireTLS
+    certificateKeyFile: {{  include "metavac-db.mongo.key_file_path" . }}
+    CAFile: {{ include "metavac-db.mongo.ca_cert_file_path" . }}
 {{- end -}}

@@ -1,5 +1,5 @@
 {{- define "metavac-db.mongo.configmap.tpl" }}
-
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
