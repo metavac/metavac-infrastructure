@@ -2,7 +2,7 @@
 {{- $servers := list -}}
 {{- $shardsvr := (get .Values "mongodb-sharded").shardsvr -}}
 {{- range $i, $_ := until ($shardsvr.replicas | int) -}}
-    {{- $servers = append $servers (cat (get $shardsvr.podLabels "pod-name") "-" $i ".cluster.local:27018" | nospace) -}}
+    {{- $servers = append $servers (cat (get $shardsvr.podLabels "pod-name") "-" $i "-data-0" "." $.Values.global.cluster_domain ":27018" | nospace) -}}
 {{- end -}}
 
 return 0;

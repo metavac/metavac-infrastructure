@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "metavac-ca.name" . }}-issuer
+  namespace: {{ include "metavac-ca.namespace" . }}
+spec:
+  ca:
+    secretName: {{ include "metavac-ca.name" . }}-secrets

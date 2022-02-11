@@ -1,0 +1,10 @@
+{{- $namespace := (include "metavac-db.namespace" .) -}}
+{{- if (eq (len (lookup "v1" "Namespace" "" $namespace)) 0) -}}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ include "metavac-db.namespace" . }}
+  labels:
+    name: {{ include "metavac-db.namespace" . }}
+{{- end -}}

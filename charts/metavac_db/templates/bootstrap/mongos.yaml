@@ -3,13 +3,13 @@
 {{- $shardsvr := (get .Values "mongodb-sharded").shardsvr -}}
 {{- $replicas := int (sub ($shardsvr.replicas | int) 1) -}}
 {{- range $i, $_ := until ($shardsvr.replicas | int) -}}
-    {{- $servers = append $servers (cat (get $shardsvr.podLabels "pod-name") "-" $i ".cluster.local:27018" | nospace) -}}
+    {{- $servers = append $servers (cat (get $shardsvr.podLabels "pod-name") "-" $i "-data-0" "." $.Values.global.cluster_domain ":27018" | nospace) -}}
 {{- end -}}
 
 return 0;
 
 sh.addShard("metavac/{{- range $j, $val := $servers }}{{- $val }}{{- not (eq $j $replicas) | ternary "," "" }}{{- end }}")
-sh.enableSharding("{{ .Values.db.name }}")
+sh.enableSharding("{{ .Values.global.db_name }}")
 {{- end -}}
 
 {{- define "metavac-db.mongo.bootstrap.volume_mounts.mongos" -}}

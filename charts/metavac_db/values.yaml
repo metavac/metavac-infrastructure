@@ -2,89 +2,114 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+local_storage:
+  enabled: true
+  class_name: local-storage
+  local_path: /mnt/local
+
 cert_source_dir: "certs"
 
 global:
   name: "metavac-db"
-  namespace: "dev"
+  namespace: "metavac-db"
+  cluster_domain: "db.dev.metavac.ac"
 
-  mongoMount: "/mnt/mongo"
-  logDir: "{{ .Values.global.mongoMount }}/logs"
-
-  cert_mongo_dir: "{{ .Values.global.mongoMount }}/ssl"
-
-db:
-  name: "metavac"
+  db_name: "metavac"
   url: "localhost:27017/metavac"
+
+  mount: "/data"
+  log_path: "{{ tpl .Values.global.mount . }}/logs/log"
+  db_dir: "{{ tpl .Values.global.mount . }}/db"
+  cert_dir: "{{ tpl .Values.global.mount . }}/ssl"
+
+
   ca_cert: |
     -----BEGIN CERTIFICATE-----
-    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
+    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
+    Ci5QrTnXSYKhqq6fGHDfUvTv6QhPZgPxQd/E
     -----END CERTIFICATE-----
   
 
 mongodb-sharded:
   nameOverride: "metavac-db"
+  clusterDomain: "db.dev.metavac.ac"
   shards: 2
+  common:
+    mongodbDirectoryPerDB: true
+    extraEnvVars:
+      - name: MONGODB_DATA_DIR
+        value: "{{ .Values.global.mount }}"
+    initContainers:
+      - name: setup-certs
+        image: "busybox:latest"
+        command: ["sh", "-c", "set -x; sed \"s/id.pem/$(hostname).pem/g\" /bitnami/mongodb/conf/mongodb.conf > /bitnami/mongodb/conf/mongodb.conf"]
+        volumeMounts: |
+          {{- include "metavac-db.mongo.secrets.volume_mounts.configsvr" . -}}
   configsvr:
     replicas: 1
     config: "{{ include \"metavac-db.mongo.conf.configsvr\" . }}"
     podLabels:
-      pod-name: metavac-db-configsvr
+      pod-name: configsvr
     persistence:
       mountPath: "/mnt/mongo"
       storageClass: "local-storage"
       size: "4Gi"
-    extraVolumes:
-      - "{{ include \"metavac-db.mongo.secrets.volumes.configsvr\" . }}"
-      - "{{ include \"metavac-db.mongo.bootstrap.volumes.configsvr\" . }}"
-    extraVolumeMounts:
-      - "{{ include \"metavac-db.mongo.secrets.volume_mounts.configsvr\" . }}"
-      - "{{ include \"metavac-db.mongo.bootstrap.volume_mounts.configsvr\" . }}"
+    extraVolumes: |
+      {{ include "metavac-db.mongo.secrets.volumes.configsvr" . }}
+      {{ include "metavac-db.mongo.bootstrap.volumes.configsvr" . }}
+      {{ include "metavac-db.mongo.installshim.volumes" . }}
+    extraVolumeMounts: |
+      {{ include "metavac-db.mongo.secrets.volume_mounts.configsvr" . }}
+      {{ include "metavac-db.mongo.bootstrap.volume_mounts.configsvr" . }}
+      {{ include "metavac-db.mongo.installshim.volume_mounts" . }}
   mongos:
     replicas: 2
     config: "{{ include \"metavac-db.mongo.conf.mongos\" . }}"
     podLabels:
-      pod-name: metavac-db-mongos
+      pod-name: mongos
     useStatefulSet: true
     servicePerReplica:
       nodePort: 30007
-    extraVolumes:
-      - "{{ include \"metavac-db.mongo.secrets.volumes.mongos\" . }}"
-      - "{{ include \"metavac-db.mongo.bootstrap.volumes.mongos\" . }}"
-    extraVolumeMounts:
-      - "{{ include \"metavac-db.mongo.secrets.volume_mounts.mongos\" . }}"
-      - "{{ include \"metavac-db.mongo.bootstrap.volume_mounts.mongos\" . }}"
+    extraVolumes: |
+      {{ include "metavac-db.mongo.secrets.volumes.mongos" . }}
+      {{ include "metavac-db.mongo.bootstrap.volumes.mongos" . }}
+    extraVolumeMounts: |
+      {{ include "metavac-db.mongo.secrets.volume_mounts.mongos" . }}
+      {{ include "metavac-db.mongo.bootstrap.volume_mounts.mongos" . }}
   shardsvr:
-    replicas: 1
+    replicas: 2
     config: "{{ include \"metavac-db.mongo.conf.shardsvr\" . }}"
     podLabels:
-      pod-name: metavac-db-shardsvr
+      pod-name: shardsvr
     persistence:
       mountPath: "/mnt/mongo"
+      storageClass: "local-storage"
       size: "4Gi"
-    extraVolumes:
-      - "{{ include \"metavac-db.mongo.secrets.volumes.shardsvr\" . }}"
-      - "{{ include \"metavac-db.mongo.bootstrap.volumes.shardsvr\" . }}"
-    extraVolumeMounts:
-      - "{{ include \"metavac-db.mongo.secrets.volume_mounts.shardsvr\" . }}"
-      - "{{ include \"metavac-db.mongo.bootstrap.volume_mounts.shardsvr\" . }}"
+    extraVolumes: |
+      {{ include "metavac-db.mongo.secrets.volumes.shardsvr" . }}
+      {{ include "metavac-db.mongo.bootstrap.volumes.shardsvr" . }}
+    extraVolumeMounts: |
+      {{ include "metavac-db.mongo.secrets.volume_mounts.shardsvr" . }}
+      {{ include "metavac-db.mongo.bootstrap.volume_mounts.shardsvr" . }}
 
 nameOverride: ""
 fullnameOverride: ""

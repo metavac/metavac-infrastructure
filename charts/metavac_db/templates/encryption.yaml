@@ -1,13 +1,14 @@
+{{- define "metavac.encryption" -}}
+---
 apiVersion: apiserver.config.k8s.io/v1
 kind: EncryptionConfiguration
 resources:
   - resources:
-    - {{ include "metavac-db.fullname" . }}-configsvr-certs
-    - {{ include "metavac-db.fullname" . }}-mongos-certs
-    - {{ include "metavac-db.fullname" . }}-shardsvr-certs
+    - secrets
     providers:
     - identity: {}
     - secretbox:
         keys:
         - name: dev
           secret: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
+{{- end -}}

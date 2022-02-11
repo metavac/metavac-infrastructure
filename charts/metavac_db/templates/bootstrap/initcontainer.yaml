@@ -1,0 +1,5 @@
+      - name: setup-certs
+        image: "busybox:latest"
+        command: ["sh", "-c", "set -x; sed \"s/id.pem/$(hostname).pem/g\" /bitnami/mongodb/conf/mongodb.conf > /bitnami/mongodb/conf/mongodb.conf"]
+        volumeMounts: |
+          {{- include "metavac-db.mongo.secrets.volume_mounts.configsvr" . -}}

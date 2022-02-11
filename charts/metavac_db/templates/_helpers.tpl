@@ -65,33 +65,58 @@ Create the name of the service account to use
 Create the namespace to deploy to
 */}}
 {{- define "metavac-db.namespace" -}}
-{{- default "default" .Values.global.namespace .Release.namespace }}
-{{- end }}
+    {{- if .Release.Namespace -}}
+        {{- .Release.Namespace -}}
+    {{- else if .Values.global.namespace -}}
+        {{- .Values.global.namespace -}}
+    {{- else -}}
+default
+    {{- end -}}
+{{- end -}}
 
 {{/*
 Mongo Connection URL to deploy to
 */}}
 {{- define "metavac-db.mongo.url" -}}
-{{- .Values.db.url }}
+{{- tpl .Values.global.url . }}
 {{- end }}
 
 {{/*
 Mongo Database name to deploy to
 */}}
 {{- define "metavac-db.mongo.name" -}}
-{{- .Values.db.name }}
+{{- tpl .Values.global.db_name . }}
 {{- end }}
 
 {{/*
 Mongo Database ca_cert_file_path
 */}}
 {{- define "metavac-db.mongo.ca_cert_file_path" -}}
-{{- tpl .Values.global.cert_mongo_dir . }}/ca.crt
+{{- tpl .Values.global.cert_dir . }}/ca.crt
 {{- end }}
 
 {{/*
 Mongo Database key_file_path
 */}}
 {{- define "metavac-db.mongo.key_file_path" -}}
-{{ tpl .Values.global.cert_mongo_dir . }}/id.pem
+{{ tpl .Values.global.cert_dir . }}/id.pem
 {{- end }}
+
+{{/*
+Metavac DB local storage configuration
+*/}}
+{{- define "metavac-db.local_storage.enabled" -}}
+{{ tpl .Values.local_storage.enabled . }}
+{{- end -}}
+
+{{- define "metavac-db.local_storage.class_name" -}}
+{{ tpl .Values.local_storage.class_name . }}
+{{- end -}}
+
+{{- define "metavac-db.local_storage.local_path" -}}
+{{ tpl .Values.local_storage.local_path . }}
+{{- end -}}
+
+{{- define "metavac-db.cluster_domain" -}}
+{{- tpl .Values.global.cluster_domain . }}
+{{- end -}}

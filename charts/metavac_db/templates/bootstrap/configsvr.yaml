@@ -2,7 +2,7 @@
 {{- $servers := list -}}
 {{- $configsvr := (get .Values "mongodb-sharded").configsvr -}}
 {{- range $i, $_ := until ($configsvr.replicas | int) -}}
-    {{- $servers = append $servers (cat (get $configsvr.podLabels "pod-name") "-" $i ".cluster.local:27019" | nospace) -}}
+    {{- $servers = append $servers (cat (get $configsvr.podLabels "pod-name") "-" $i "." $.Values.global.cluster_domain ":27019" | nospace) -}}
 {{- end -}}
 
 return 0;

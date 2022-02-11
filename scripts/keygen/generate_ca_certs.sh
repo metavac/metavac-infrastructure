@@ -3,7 +3,7 @@
 ARGS=()
 
 CA_DIR="~/"
-SUBJECT="/CN=metavac.ac/OU=Infra/O=Metavac"
+SUBJECT="/CN=*.metavac.ac/OU=Infra/O=Metavac/DC=dev/DC=metavac/DC=ac"
 EXPIRY=365
 
 while [[ $# -gt 0 ]]; do
