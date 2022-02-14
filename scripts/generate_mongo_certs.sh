@@ -116,7 +116,7 @@ do
     check_errors
 done
 
-rm $OUTPUT_DIR/server.csr $OUTPUT_DIR/server.key $OUTPUT_DIR/server.crt $OUTPUT_DIR/ca.key $OUTPUT_DIR/ca.srl
+rm $OUTPUT_DIR/server.csr $OUTPUT_DIR/server.key $OUTPUT_DIR/server.crt $OUTPUT_DIR/ca.srl
 check_errors
 
 echo "Generated certificates for Mongo deployment:"

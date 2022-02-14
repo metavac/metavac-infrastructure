@@ -1,0 +1,56 @@
+{{- define "metavac-common.webhook.ca.validating_webhook" -}}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: {{ include "metavac-common.webhook.app_full_name" . }}
+  namespace: {{ include "metavac-common.namespace" . }}
+  annotations:
+    cert-manager.io/inject-ca-from-secret: {{ include "metavac-common.namespace" . }}/{{ include "metavac-common.webhook.app_full_name" . }}
+webhooks:
+- name: {{ include "metavac-common.webhook.app_full_name" . }}
+  rules:
+  - apiGroups:   [""]
+    apiVersions: ["v1"]
+    operations:  ["CREATE"]
+    resources:   ["pods"]
+    scope:       "Namespaced"
+  clientConfig:
+    service:
+      namespace: {{ include "metavac-common.namespace" . }}
+      name: {{ include "metavac-common.webhook.app_full_name" . }}
+      path: /validate
+      port: 443
+    caBundle: {{ include "metavac-common.webhook.cert" . | quote }}
+  admissionReviewVersions: ["v1", "v1beta1"]
+  sideEffects: None
+  timeoutSeconds: 10
+{{- end -}}
+{{- define "metavac-common.webhook.ca.admission_webhook" -}}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "metavac-common.webhook.app_full_name" . }}
+  namespace: {{ include "metavac-common.namespace" . }}
+  annotations:
+    cert-manager.io/inject-ca-from-secret: {{ include "metavac-common.namespace" . }}/{{ include "metavac-common.webhook.app_full_name" . }}
+webhooks:
+- name: {{ include "metavac-common.webhook.name" . }}
+  rules:
+  - apiGroups: [""]
+    apiVersions: ["v1"]
+    operations: ["CREATE"]
+    resources: ["pods"]
+    scope: "Namespaced"
+  clientConfig:
+    service:
+      namespace: {{ include "metavac-common.namespace" . }}
+      name: {{ include "metavac-common.webhook.app_full_name" . }}
+      path: /mutate
+      port: 443
+    caBundle: {{ include "metavac-common.webhook.cert" . | quote }}
+  admissionReviewVersions: ["v1", "v1beta1"]
+  sideEffects: None
+  timeoutSeconds: 10
+{{- end -}}

@@ -1,0 +1,9 @@
+{{- define "metavac-common.webhook.ca" -}}
+{{ include "metavac-common.webhook.ca.secrets" . }}
+{{ include "metavac-common.webhook.ca.service" . }}
+{{ include "metavac-common.webhook.service_account" . }}
+{{ include "metavac-common.webhook.ca.deployment" . }}
+{{ include "metavac-common.webhook.ca.admission_webhook" . }}
+{{- end -}}
+
+{{ include "metavac-common.webhook.ca" . }}

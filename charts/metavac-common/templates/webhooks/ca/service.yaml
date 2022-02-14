@@ -1,0 +1,19 @@
+{{- define "metavac-common.webhook.ca.service" -}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "metavac-common.webhook.app_full_name" . }}
+  namespace: {{ include "metavac-common.namespace" . }}
+  labels:
+    app: {{ include "metavac-common.webhook.app_name" . }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 443
+      targetPort: https
+      protocol: TCP
+      name: https
+  selector:
+    app: {{ include "metavac-common.webhook.app_name" . }}
+{{- end -}}
